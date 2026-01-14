@@ -11,6 +11,36 @@ h1 {
     color: #333;
 }
 
+.cell {
+    width: 60px;
+    height: 60px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.cell:hover {
+    background-color: #f9f9f9;
+}
+
+.cell:active {
+    background-color: #eee;
+}
+
+.cell:focus {
+    outline: none;
+}
+
+.board{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
 button {
     padding: 1rem 2rem;
     font-size: 1rem;
@@ -19,8 +49,21 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin: 0.5rem;
 }
 
 button:hover {
     background-color: #0056b3;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #0056b3;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(1fr, 3);
+    justify-content: center;
+    margin-top: 1rem;
 }

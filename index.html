@@ -1,24 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <script src="script.js"></script>
-    <link rel="stylesheet" href="styles.css">
-    <h1>Tic Tac Toe</h1>
-    <div id="game-board">
-        <button class="cell" data-cell-index="0"></button>
-        <button class="cell" data-cell-index="1"></button>
-        <button class="cell" data-cell-index="2"></button>
-        <button class="cell" data-cell-index="3"></button>
-        <button class="cell" data-cell-index="4"></button>
-        <button class="cell" data-cell-index="5"></button>
-        <button class="cell" data-cell-index="6"></button>
-        <button class="cell" data-cell-index="7"></button>
-        <button class="cell" data-cell-index="8"></button>
+    <link rel="stylesheet" href="styles.css"> <!-- stylesheet -->
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <br>
+        <div class="board">
+            <div class="cell" id="cell-0"></div>
+            <div class="cell" id="cell-1"></div>
+            <div class="cell" id="cell-2"></div>
+            <div class="cell" id="cell-3"></div>
+            <div class="cell" id="cell-4"></div>
+            <div class="cell" id="cell-5"></div>
+            <div class="cell" id="cell-6"></div>
+            <div class="cell" id="cell-7"></div>
+            <div class="cell" id="cell-8"></div>
+        </div>
+        <br>
+        <div class="controls">
+            <button id="reset-button">Reset</button>
+        </div>
     </div>
 </body>
+<script>
+    // Gameboard module: holds board array and operations
+    const Gameboard = (() => {
+        const board = Array(9).fill(null); // 9 cells
+
+        const getBoard = () => board; // return internal board
+
+        const setCell = (index, player) => { // set symbol if empty
+            if (board[index] === null) board[index] = player;
+        };
+
+        const resetBoard = () => { // clear board
+            for (let i = 0; i < board.length; i++) board[i] = null;
+        };
+
+        return { getBoard, setCell, resetBoard };
+    })();
+
+    // Player factory: simple object with name and symbol
+    const Player = (name, symbol) => ({ name, symbol });
+
+    // GameController module: manages turns and win checking
+    const GameController = (() => {
+        const player1 = Player("Player 1", "X");
+        const player2 = Player("Player 2", "O");
+        let currentPlayer = player1;
+
+        const switchPlayer = () => currentPlayer = currentPlayer === player1 ? player2 : player1;
+
+        const handleCellClick = (index) => {
+            Gameboard.setCell(index, currentPlayer.symbol); // try place symbol
+            const cell = cells[index];
+            if (cells[index].textContent !== "") return; // ignore if occupied
+            cell.textContent = currentPlayer.symbol; // update UI
+            if (checkWin(currentPlayer.symbol)) {
+                console.log(`${currentPlayer.name} wins!`); // winner
+            } else {
+                switchPlayer(); // next turn
+            }
+        };
+
+        const checkWin = (symbol) => {
+            const winningCombinations = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+                [0, 3, 6], [1, 4, 7], [2, 5, 8], // cols
+                [0, 4, 8], [2, 4, 6]          // diags
+            ];
+            return winningCombinations.some(comb =>
+                comb.every(i => Gameboard.getBoard()[i] === symbol)
+            );
+        };
+
+        return { handleCellClick };
+    })();
+
+    // Wire up UI: cells and reset button
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell, index) => cell.addEventListener("click", () => GameController.handleCellClick(index)));
+
+    const resetButton = document.getElementById("reset-button");
+    resetButton.addEventListener("click", () => {
+        Gameboard.resetBoard(); // clear model
+        cells.forEach(cell => cell.textContent = ""); // clear view
+    });
+</script>
+
 </html>
