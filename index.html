@@ -11,6 +11,8 @@
 <body>
     <div class="container">
         <h1>Tic Tac Toe</h1>
+        <p>Click a cell to make a move.</p>
+        <div class="status"></div>
         <br>
         <div class="board">
             <div class="cell" id="cell-0"></div>
@@ -65,6 +67,7 @@
             cell.textContent = currentPlayer.symbol; // update UI
             if (checkWin(currentPlayer.symbol)) {
                 console.log(`${currentPlayer.name} wins!`); // winner
+                document.querySelector(".status").textContent = `${currentPlayer.name} wins!`;
             } else {
                 switchPlayer(); // next turn
             }
@@ -92,6 +95,7 @@
     resetButton.addEventListener("click", () => {
         Gameboard.resetBoard(); // clear model
         cells.forEach(cell => cell.textContent = ""); // clear view
+        document.querySelector(".status").textContent = ""; // clear status
     });
 </script>
 
